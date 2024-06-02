@@ -95,6 +95,20 @@ def standart_write(file_name, res):
         f_w.writeheader()
         f_w.writerows(res)
 
+def search_record(file_name):
+    if not exists(file_name):
+        print(f"Файл {file_name} отсутствует")
+        return
+
+    characteristic = input("Введите имя или фамилию для поиска: ")
+    records = read_file(file_name)
+    found = [record for record in records if characteristic in record.values()]
+    
+    if found:
+        for record in found:
+            print(record)
+    else:
+        print("Запись не найдена")
 
 file_name = "phone.csv"
 
@@ -117,6 +131,8 @@ def main():
             if not exists(file_name):
                 print("файл отсутствует")
             remove_row(file_name)
+        elif command == "s":
+            search_record(file_name)
 
 
 main()
