@@ -59,7 +59,7 @@ def get_info():
 
 def create_file(file_name):
     with open(file_name, 'w', encoding='utf-8', newline='') as data:
-        f_w = DictWriter(data, field_names=[
+        f_w = DictWriter(data, fieldnames=[
                          'first_name', 'second_name', 'phone_number'])
         f_w.writeheader()
 
@@ -91,7 +91,7 @@ def remove_row(file_name):
 
 def standart_write(file_name, res):
     with open(file_name, 'w', encoding='utf-8', newline='') as data:
-        f_w = DictWriter(data, field_names=['first_name', 'second_name', 'phone_number'])
+        f_w = DictWriter(data, fieldnames=['first_name', 'second_name', 'phone_number'])
         f_w.writeheader()
         f_w.writerows(res)
 
@@ -111,7 +111,17 @@ def search_record(file_name):
         print("Запись не найдена")
 
 file_name = "phone.csv"
+file_name_new = "phone_new.csv"
 
+def copy_data(file_name, file_name_new):
+    if not exists(file_name):
+        print(f"Исходный файл {file_name} отсутствует")
+        return
+    if not exists(file_name_new):
+        create_file(file_name_new)
+    data = read_file(file_name)
+    standart_write(file_name_new, data)
+    print(f"Данные скопированы из {file_name} в {file_name_new}")
 
 def main():
     while True:
@@ -133,6 +143,15 @@ def main():
             remove_row(file_name)
         elif command == "s":
             search_record(file_name)
+        elif command == 'c':            
+            copy_data(file_name, file_name_new)
+        elif command == 'rn':
+            if not exists(file_name_new):
+                print('файл отсутствует, пожалуйста сначала скопируйте данные')
+                continue
+            print(*read_file(file_name_new))             
+        elif command == 'help':
+            print('Список команд: w - запись, r - чтение, d - удаление, s - поиск по имени или фамилии, c - копирование в file_name_new, rn - чтение из file_name_new, q - выход')                
 
 
 main()
